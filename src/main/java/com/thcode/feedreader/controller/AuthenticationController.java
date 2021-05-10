@@ -50,8 +50,9 @@ public class AuthenticationController {
 		UserDetails user = (UserDetails) authentication.getPrincipal();
 		
 		String ip = authenticationRequest.getIp();
+		boolean isAdmin = user.getAuthorities().stream().anyMatch(userAuthority -> userAuthority.getAuthority().equals("ROLE_ADMIN"));
 		
-		return ResponseEntity.ok(new AuthenticationResponse(jwtUtil.generateTokenForUserWithIP(user, ip), jwtUtil.getExpiration(), ip, false));
+		return ResponseEntity.ok(new AuthenticationResponse(jwtUtil.generateTokenForUserWithIP(user, ip), jwtUtil.getExpiration(), ip, isAdmin));
 	}
 	
 	//FOR THE TEST of Authorization - remove these later on

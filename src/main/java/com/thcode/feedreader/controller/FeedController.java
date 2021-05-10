@@ -14,14 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.InputSource;
 
 import com.thcode.feedreader.exception.FeedException;
-import com.thcode.feedreader.model.FeedRequest;
 import com.thcode.feedreader.model.FeedResponse;
 import com.thcode.feedreader.xml.Feed;
 import com.thcode.feedreader.xml.Responsible;
@@ -45,10 +44,10 @@ public class FeedController {
     private MessageSource messageSource;
 	
 	@GetMapping("/api/getFeed")
-	public ResponseEntity<FeedResponse> getFeed(@RequestBody FeedRequest feedRequest) throws FeedException {
+	public ResponseEntity<FeedResponse> getFeed(@RequestParam String feedUrl) throws FeedException {
 		
 		//Check for url
-		if(feedRequest.getFeedUrl() == null || feedRequest.getFeedUrl().trim().isBlank()) {
+		if(feedUrl.trim().isBlank()) {
 			throw new FeedException(messageSource.getMessage("notfound.FeedRequest.feedUrl", null, null));
 		}
 		
@@ -60,7 +59,7 @@ public class FeedController {
 		
 		try
 		{
-			String feedString = restTemplate.getForObject(feedRequest.getFeedUrl(), String.class);
+			String feedString = restTemplate.getForObject(feedUrl, String.class);
 			
 			//Initialize SaxParser and disable validation of dtds
 	    	SAXParserFactory spf = SAXParserFactory.newInstance();
