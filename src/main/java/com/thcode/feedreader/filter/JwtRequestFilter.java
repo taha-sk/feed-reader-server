@@ -49,26 +49,37 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		//If it exists, then continue
 		if(requestAuthorizationHeader != null) {
 			
-			//Check for "Bearer <token>"
-			if (requestAuthorizationHeader.startsWith("Bearer ")) {
-				String jws = requestAuthorizationHeader.substring(7);
-
-				//Get user name from the token
-				String userName = jwtUtil.getUserNameFromToken(jws);
-
-				//If you can find the user name, then load it and authenticate.
-				if(userName != null) {
-					UserDetails user = userDetailsService.loadUserByUsername(userName);
-					if(user != null) {
-						SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
-					}else {
-						logger.warn("User not found.");
+			//Get Header
+			final String clientIp = request.getHeader("X-Forwarded-For");
+			
+			
+			if(clientIp != null) {
+			
+				//Check for "Bearer <token>"
+				if (requestAuthorizationHeader.startsWith("Bearer ")) {
+					String jws = requestAuthorizationHeader.substring(7);
+	
+					//Get user name from the token
+					String userName = jwtUtil.getUserNameFromToken(jws, clientIp);
+	
+					//If you can find the user name, then load it and authenticate.
+					if(userName != null) {
+						UserDetails user = userDetailsService.loadUserByUsername(userName);
+						if(user != null) {
+							SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
+						}else {
+							logger.warn("User not found.");
+						}
 					}
+	
+				}else {
+					logger.warn("Authorization Header does not start with \"Bearer \".");
 				}
-
+			
 			}else {
-				logger.warn("Authorization Header does not start with \"Bearer \".");
+				logger.warn("X-Forwarded-For Header is missing.");
 			}
+			
 		}
 		
 		//Go to next filter

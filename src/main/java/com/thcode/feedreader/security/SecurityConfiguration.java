@@ -15,6 +15,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.thcode.feedreader.filter.JwtRequestFilter;
 
@@ -79,6 +82,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.roles("USER","ADMIN")
 				.build();
 		return new InMemoryUserDetailsManager(user, admin);
+	}
+	
+	@Bean
+	public CorsFilter corsFilter() {
+	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	    CorsConfiguration config = new CorsConfiguration();
+	    config.addAllowedOrigin("http://localhost:4200");
+	    config.addAllowedHeader("*");
+	    config.addAllowedMethod("*");
+	    config.setMaxAge(3600L);
+	    source.registerCorsConfiguration("/api/**", config);
+	    return new CorsFilter(source);
 	}
 
 }

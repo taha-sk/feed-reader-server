@@ -52,14 +52,14 @@ public class JwtUtil {
 		return this.secretKey;
 	}
 	
-	public String generateTokenForUser(UserDetails user) {
-		return Jwts.builder().setIssuer(this.issuer).setSubject(user.getUsername())
+	public String generateTokenForUserWithIP(UserDetails user, String ip) {
+		return Jwts.builder().claim("ip", ip).setIssuer(this.issuer).setSubject(user.getUsername())
 				.setExpiration(new Date(System.currentTimeMillis() + this.expiration)).setIssuedAt(new Date())
 				.signWith(getSecretKey()).compact();
 	}
 	
-	public String getUserNameFromToken(String jws) {
-		Jws<Claims> claims = validateAndParseClaims(jws);
+	public String getUserNameFromToken(String jws, String ip) {
+		Jws<Claims> claims = validateAndParseClaims(jws, ip);
 		if (claims != null) {
 			return claims.getBody().getSubject();
 		}else {
@@ -67,10 +67,14 @@ public class JwtUtil {
 		}
 	}
 	
+	public long getExpiration() {
+		return expiration;
+	}
+	
 	//parseClaimsJws method also checks for the validity of the token. It looks for your requirements and the date controls. You don't need to specify additional date checks.
-	private Jws<Claims> validateAndParseClaims(String jws) {
+	private Jws<Claims> validateAndParseClaims(String jws, String ip) {
 		try {
-			return Jwts.parserBuilder().requireIssuer(this.issuer).setSigningKey(getSecretKey()).build().parseClaimsJws(jws);
+			return Jwts.parserBuilder().require("ip", ip).requireIssuer(this.issuer).setSigningKey(getSecretKey()).build().parseClaimsJws(jws);
 		} catch (JwtException ex) {
 			logger.error("Invalid JWT signature: {}", ex.getMessage());
 			return null;

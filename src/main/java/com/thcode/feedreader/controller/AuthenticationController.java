@@ -49,7 +49,9 @@ public class AuthenticationController {
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 		UserDetails user = (UserDetails) authentication.getPrincipal();
 		
-		return ResponseEntity.ok(new AuthenticationResponse(jwtUtil.generateTokenForUser(user)));
+		String ip = authenticationRequest.getIp();
+		
+		return ResponseEntity.ok(new AuthenticationResponse(jwtUtil.generateTokenForUserWithIP(user, ip), jwtUtil.getExpiration(), ip, false));
 	}
 	
 	//FOR THE TEST of Authorization - remove these later on
