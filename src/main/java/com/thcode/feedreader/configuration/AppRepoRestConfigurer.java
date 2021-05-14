@@ -6,6 +6,7 @@ import org.springframework.data.rest.core.event.ValidatingRepositoryEventListene
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
+import com.thcode.feedreader.model.Widget;
 import com.thcode.feedreader.model.WidgetType;
 import com.thcode.feedreader.validator.WidgetValidator;
 
@@ -14,6 +15,7 @@ public class AppRepoRestConfigurer implements RepositoryRestConfigurer {
 	
 	@Override
 	public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
+		config.exposeIdsFor(Widget.class);
 		config.exposeIdsFor(WidgetType.class);
 	}
 	
