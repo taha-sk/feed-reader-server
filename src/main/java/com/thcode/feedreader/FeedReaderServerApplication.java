@@ -4,6 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.thcode.feedreader.model.Widget;
 import com.thcode.feedreader.model.WidgetType;
@@ -30,6 +34,9 @@ public class FeedReaderServerApplication implements CommandLineRunner {
 	
 	@Autowired
 	private WidgetRepository widgetRepository;
+	
+	@Autowired
+	private UserDetailsService userDetailsService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(FeedReaderServerApplication.class, args);
@@ -37,6 +44,10 @@ public class FeedReaderServerApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		
+		//Need "admin" user for data manipulation
+		UserDetails user = userDetailsService.loadUserByUsername("admin");
+		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
 		
 		//Clean up
 		widgetRepository.deleteAll();
@@ -58,6 +69,9 @@ public class FeedReaderServerApplication implements CommandLineRunner {
 		
 		//KDnuggets request gets HTTP 406 Not Acceptable unfortunately :(, however it also returns the feed. :) I won't handle that.
 		//widgetRepository.save(new Widget(feed, "KDnuggets", "https://www.kdnuggets.com/feed"));
+		
+		//Logout "admin"
+		SecurityContextHolder.clearContext();
 		
 	}
 
