@@ -6,6 +6,14 @@ import org.springframework.validation.Validator;
 
 import com.thcode.feedreader.model.Widget;
 
+/**
+ * 
+ * This is the WidgetValidator, it checks Widget's fields before persistence
+ * 
+ * 
+ * @author taha-sk
+ *
+ */
 public class WidgetValidator implements Validator {
 
 	@Override

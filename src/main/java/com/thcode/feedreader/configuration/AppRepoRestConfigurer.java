@@ -10,6 +10,14 @@ import com.thcode.feedreader.model.Widget;
 import com.thcode.feedreader.model.WidgetType;
 import com.thcode.feedreader.validator.WidgetValidator;
 
+/**
+ * 
+ * This is the AppRepoRestConfigurer, it exposes ids and registers validator
+ * 
+ * 
+ * @author taha-sk
+ *
+ */
 @Configuration
 public class AppRepoRestConfigurer implements RepositoryRestConfigurer {
 	

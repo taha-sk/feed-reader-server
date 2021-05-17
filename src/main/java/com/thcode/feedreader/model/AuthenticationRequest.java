@@ -15,9 +15,10 @@ public class AuthenticationRequest {
 	
 	protected AuthenticationRequest() {}
 	
-	public AuthenticationRequest(String username, String password) {
+	public AuthenticationRequest(String username, String password, String ip) {
 		this.username = username;
 		this.password = password;
+		this.ip = ip;
 	}
 
 	public String getUsername() {

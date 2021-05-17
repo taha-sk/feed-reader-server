@@ -5,9 +5,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.thcode.feedreader.model.Widget;
 import com.thcode.feedreader.model.WidgetType;
@@ -34,9 +33,6 @@ public class FeedReaderServerApplication implements CommandLineRunner {
 	
 	@Autowired
 	private WidgetRepository widgetRepository;
-	
-	@Autowired
-	private UserDetailsService userDetailsService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(FeedReaderServerApplication.class, args);
@@ -45,9 +41,8 @@ public class FeedReaderServerApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		//Need "admin" user for data manipulation
-		UserDetails user = userDetailsService.loadUserByUsername("admin");
-		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
+		//Need "admin" role for data manipulation
+		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("admin", null, AuthorityUtils.createAuthorityList("ROLE_ADMIN")));
 		
 		//Clean up
 		widgetRepository.deleteAll();
