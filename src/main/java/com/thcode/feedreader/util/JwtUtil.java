@@ -47,7 +47,7 @@ public class JwtUtil {
 	//secret key is provided as environment variable
 	private SecretKey getSecretKey() {
 		if(this.secretKey == null) {
-			this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(environment.getProperty("jwt_secret_key")));
+			this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(environment.getProperty("JWT_SECRET_KEY")));
 		}
 		return this.secretKey;
 	}

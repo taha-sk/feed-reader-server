@@ -24,9 +24,9 @@ import com.thcode.feedreader.repository.WidgetTypeRepository;
 @SpringBootApplication
 public class FeedReaderServerApplication implements CommandLineRunner {
 	
-    static {
-        System.setProperty("jwt_secret_key", "dGhjb2RlX3NlY3JldF9rZXlfZm9yX2ZlZWRfcmVhZGVy");
-    }
+//    static {
+//        System.setProperty("JWT_SECRET_KEY", "dGhjb2RlX3NlY3JldF9rZXlfZm9yX2ZlZWRfcmVhZGVy");
+//    }
     
 	@Autowired
 	private WidgetTypeRepository widgetTypeRepository;

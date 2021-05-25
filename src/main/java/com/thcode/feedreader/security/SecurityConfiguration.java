@@ -88,7 +88,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public CorsFilter corsFilter() {
 	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 	    CorsConfiguration config = new CorsConfiguration();
-	    config.addAllowedOrigin("http://localhost:4200");
+	    config.addAllowedOrigin("https://frclient.herokuapp.com");//http://localhost:4200
 	    config.addAllowedHeader("*");
 	    config.addAllowedMethod("*");
 	    config.setMaxAge(3600L);
