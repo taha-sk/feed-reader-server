@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 
@@ -18,7 +19,7 @@ import com.thcode.feedreader.model.WidgetType;
  *
  */
 @PreAuthorize("hasRole('ADMIN')")
-public interface WidgetTypeRepository extends PagingAndSortingRepository<WidgetType, String> {
+public interface WidgetTypeRepository extends PagingAndSortingRepository<WidgetType, String>, CrudRepository<WidgetType, String> {
 	
 	@Override
 	@PreAuthorize("hasRole('USER')")
