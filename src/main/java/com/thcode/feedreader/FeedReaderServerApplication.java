@@ -58,12 +58,13 @@ public class FeedReaderServerApplication implements CommandLineRunner {
 		//Insert
 		widgetRepository.save(new Widget(quote, "Today's Quote", quote.getDefaultValue()));
 		widgetRepository.save(new Widget(feed, "Martin Fowler", "https://martinfowler.com/feed.atom"));
-		widgetRepository.save(new Widget(feed, "DZone.com", "http://feeds.dzone.com/home"));
+		//widgetRepository.save(new Widget(feed, "DZone.com", "http://feeds.dzone.com/home"));
 		widgetRepository.save(new Widget(feed, "TechCrunch", "https://techcrunch.com/feed"));
-		widgetRepository.save(new Widget(feed, "IBM Developer", "https://developer.ibm.com/feed"));
+		//widgetRepository.save(new Widget(feed, "IBM Developer", "https://developer.ibm.com/feed"));
 		
 		//KDnuggets request gets HTTP 406 Not Acceptable unfortunately :(, however it also returns the feed. :) I won't handle that.
 		//widgetRepository.save(new Widget(feed, "KDnuggets", "https://www.kdnuggets.com/feed"));
+		widgetRepository.save(new Widget(feed, "TH Code Journal", "https://thcodejournal.wordpress.com/feed"));
 		
 		//Logout "admin"
 		SecurityContextHolder.clearContext();

@@ -1,5 +1,7 @@
 package com.thcode.feedreader.security;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,17 +12,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.User.UserBuilder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import com.thcode.feedreader.filter.JwtRequestFilter;
 
@@ -61,22 +58,22 @@ public class SecurityConfiguration {
 	    http.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
 	              authorizationManagerRequestMatcherRegistry.requestMatchers("/api/authenticate").permitAll()
 	                      .anyRequest().authenticated())
+	      .cors((cors) -> cors.configurationSource(apiConfigurationSource()))
 	      .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 	      .csrf(AbstractHttpConfigurer::disable)
 	      .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint);
 	    return http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class).build();
 	}
 	
-	@Bean
-	public CorsFilter corsFilter() {
-	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-	    CorsConfiguration config = new CorsConfiguration();
-	    config.addAllowedOrigin("https://frclient.herokuapp.com");//http://localhost:4200
-	    config.addAllowedHeader("*");
-	    config.addAllowedMethod("*");
-	    config.setMaxAge(3600L);
-	    source.registerCorsConfiguration("/api/**", config);
-	    return new CorsFilter(source);
+	UrlBasedCorsConfigurationSource apiConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+		configuration.setAllowedHeaders(Arrays.asList("*"));
+		configuration.setAllowedMethods(Arrays.asList("*"));
+		configuration.setMaxAge(3600L);
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/api/**", configuration);
+		return source;
 	}
 
 }
