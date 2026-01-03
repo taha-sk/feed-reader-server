@@ -74,7 +74,7 @@ public class JwtUtil {
 	//parseClaimsJws method also checks for the validity of the token. It looks for your requirements and the date controls. You don't need to specify additional date checks.
 	private Jws<Claims> validateAndParseClaims(String jws, String ip) {
 		try {
-			return Jwts.parserBuilder().require("ip", ip).requireIssuer(this.issuer).setSigningKey(getSecretKey()).build().parseClaimsJws(jws);
+			return Jwts.parser().require("ip", ip).requireIssuer(this.issuer).setSigningKey(getSecretKey()).build().parseClaimsJws(jws);
 		} catch (JwtException ex) {
 			logger.error("Invalid JWT signature: {}", ex.getMessage());
 			return null;

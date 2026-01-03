@@ -80,7 +80,7 @@ public class RepositoryTests {
 	@Test
 	void authenticatedCallShouldBeOkForAdminAuthorizationOnWidgetWithLimit() throws Exception {
 		//Repository entity creation test
-		for(int i=0; i<5; i++) {
+		for(int i=0; i<6; i++) {
 			this.mockMvc.perform(post("/api/widgets").contentType(MediaType.APPLICATION_JSON)
 					.content(new ObjectMapper().writeValueAsString(new Widget(null, "test widget", "test source")))
 					)

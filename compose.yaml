@@ -1,0 +1,22 @@
+services:
+  feed-reader-server-postgresql:
+    image: postgres:17.0-alpine
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: fruser
+      POSTGRES_PASSWORD: frpass
+      POSTGRES_DB: feedreader
+    ports:
+      - 127.0.0.1:5432:5432
+
+  feed-reader-server-spring:
+    build: .
+    image: feed-reader-server-spring:2.0.0
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://feed-reader-server-postgresql:5432/feedreader
+    depends_on:
+      - feed-reader-server-postgresql
+    ports:
+      - 127.0.0.1:8080:8080
