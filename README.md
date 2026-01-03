@@ -8,5 +8,7 @@ This application is using a PostgreSQL database.
 
 Spring, JPA, JWT, JAXB technologies are used.
 
-Endpoint url:
-https://frsapi.herokuapp.com
+You can use Docker to preview this application. Clone the project and switch to the "feed-reader-server" directory in terminal. Then, execute "mvnw clean install" and observe a successful build. Next, execute "docker compose up -d". After containers are up and running, you can reach this application on:
+http://localhost:8080/
+
+After starting this image, you can also build and start client application
